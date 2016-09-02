@@ -18,19 +18,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-namespace Petty\TcpClient\Tests;
+namespace Petty\TcpClient\Exceptions;
 
-use PHPUnit_Framework_TestCase;
+use Exception;
 
-class RequestTest extends PHPUnit_Framework_TestCase
+class ConnectTimeout extends Exception
 {
-    protected $requestIds = array();
-    protected $requestCalled = 0;
 
-    public function testClient()
-    {
-        $oldER = error_reporting(-1);
-
-        error_reporting($oldER);
-    }
 }
