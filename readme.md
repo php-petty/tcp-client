@@ -1,6 +1,6 @@
 # Petty TcpClient
 
-A tcp client written by php.
+A synchronous/asynchronous tcp client written by php.
 
 [![Build Status](https://travis-ci.org/php-petty/tcp-client.svg?branch=master)](https://travis-ci.org/php-petty/tcp-client)
 [![Test Status](https://php-eye.com/badge/petty/tcpclient/tested.svg?branch=master)](https://travis-ci.org/petty/tcpclient)

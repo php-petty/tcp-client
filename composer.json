@@ -1,7 +1,7 @@
 {
     "name": "petty/tcpclient",
-    "description": "A tcp client written by php.",
-    "keywords": ["tcp", "client", "asynchronous"],
+    "description": "A synchronous/asynchronous tcp client written by php.",
+    "keywords": ["tcp", "client", "asynchronous", "synchronous"],
     "type": "library",
     "homepage": "https://github.com/php-petty/tcp-client",
     "license": "GPL-2.0",
