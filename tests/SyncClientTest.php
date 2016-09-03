@@ -38,7 +38,7 @@ class SyncClientTest extends PHPUnit_Framework_TestCase
             'peer_name' => $host,
             'disable_compression' => true,
             'SNI_enabled' => true,
-            'cafile' => __DIR__ . '/../src/Common/cacert.pem',
+            'cafile' => realpath(__DIR__ . '/../src/Common/cacert.pem'),
             'verify_peer' => true,
             'verify_peer_name' => true,
             'allow_self_signed' => false,
