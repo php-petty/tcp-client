@@ -67,7 +67,7 @@ class AsyncClient extends Client
         if ($this->sendBuffer) {
             $this->sendBuffer .= $data;
 
-            return 0;
+            return true;
         }
 
         $len = fwrite($this->stream, $data);
@@ -82,13 +82,13 @@ class AsyncClient extends Client
             $this->event->onWrite($this->stream, array($this, 'writeBufferCallback'), null, $this->receiveTimeout);
         }
 
-        return $len;
+        return true;
     }
 
     public function connect($host, $port, $timeout = 30000)
     {
         $this->clientEvent->onConnect($this);
-        $this->stream = $this->newConnection($host, $port, $timeout, true);
+        $this->stream = $this->newConnection($host, $port, $timeout);
 
         if (false === $this->stream) {
             throw new ConnectFailed();
@@ -167,6 +167,10 @@ class AsyncClient extends Client
         if (Event::TIMEOUT === $event) {
             $this->close();
             throw new ConnectTimeout();
+        }
+
+        if (false === $this->streamName = stream_socket_get_name($this->stream, true)) {
+            throw new ConnectFailed();
         }
 
         $this->clientEvent->onConnected($this);

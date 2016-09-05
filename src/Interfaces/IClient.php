@@ -37,7 +37,7 @@ interface IClient
 
     /**
      * @param string $data
-     * @return int
+     * @return bool
      */
     public function send($data);
 

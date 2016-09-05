@@ -56,6 +56,11 @@ abstract class Client implements IClient
     protected $remotePort;
 
     /**
+     * @var string
+     */
+    protected $streamName;
+
+    /**
      * @var array
      */
     protected $sslOptions = array(
@@ -151,17 +156,16 @@ abstract class Client implements IClient
      * @param string $host
      * @param int $port
      * @param int $timeout milliseconds
-     * @param bool $async
      * @return resource|false
      */
-    protected function newConnection($host, $port, $timeout, $async)
+    protected function newConnection($host, $port, $timeout)
     {
         if ($this->connected) {
             return false;
         }
 
         $ip = Helper::host2ip($host);
-        $flag = $async ? STREAM_CLIENT_CONNECT | STREAM_CLIENT_ASYNC_CONNECT : STREAM_CLIENT_CONNECT;
+        $flag = STREAM_CLIENT_CONNECT | STREAM_CLIENT_ASYNC_CONNECT;
 
         $this->remoteHost = $host;
         $this->remoteIp = $ip;

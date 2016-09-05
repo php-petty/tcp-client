@@ -22,16 +22,68 @@ namespace Petty\TcpClient;
 
 class SyncClient extends Client
 {
+    /**
+     * @var int
+     */
+    protected $writeTimeout;
+
     public function connect($host, $port, $timeout = 30000)
     {
-        $this->stream = $this->newConnection($host, $port, $timeout, false);
+        $this->writeTimeout = $timeout;
+        $this->stream = $this->newConnection($host, $port, $timeout);
+        if (false === $this->stream) {
+            return false;
+        }
 
-        return false === $this->stream ? false : true;
+        stream_set_blocking($this->stream, 0);
+        do {
+            $r = $e = null;
+            $w = array($this->stream);
+            if (!$num = stream_select($r, $w, $e, 0, $timeout * 1000)) {
+                break;
+            }
+
+            if (false === $this->streamName = stream_socket_get_name($this->stream, true)) {
+                break;
+            }
+
+            return true;
+        } while (false);
+
+        $this->close();
+
+        return false;
     }
 
     public function send($data)
     {
-        return $this->connected ? fwrite($this->stream, $data) : false;
+        if (!$this->connected || strlen($data) === 0) {
+            return false;
+        }
+
+        $timeout = $this->writeTimeout * 1000;
+        do {
+            $len = fwrite($this->stream, $data);
+            if (!$len) {
+                $this->close();
+
+                return false;
+            }
+
+            if (strlen($data) === $len) {
+                return true;
+            }
+
+            $r = $e = null;
+            $w = array($this->stream);
+            if (!$num = stream_select($r, $w, $e, 0, $timeout)) {
+                $this->close();
+
+                return false;
+            }
+        } while ($data = substr($data, $len));
+
+        return false;
     }
 
     /**
